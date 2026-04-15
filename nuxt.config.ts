@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
+    "@nuxt/icon",
     [
       "@nuxtjs/google-fonts",
       {
@@ -23,6 +24,12 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
     typeCheck: true,
+  },
+
+  vite: {
+    optimizeDeps: {
+      include: ["vee-validate", "@vee-validate/zod", "zod"],
+    },
   },
 
   css: ["~/assets/css/main.css"],

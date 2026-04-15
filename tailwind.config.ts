@@ -3,6 +3,7 @@ import type { Config } from "tailwindcss";
 export default {
   content: [
     "./app/components/**/*.{js,vue,ts}",
+    "./app/modules/**/*.{js,vue,ts}",
     "./app/layouts/**/*.vue",
     "./app/pages/**/*.vue",
     "./app/plugins/**/*.{js,ts}",
@@ -64,6 +65,7 @@ export default {
         lg: "18px",
         xl: "20px",
         "2xl": "24px",
+        "3xl": "28px",
       },
       borderRadius: {
         sm: "4px",
