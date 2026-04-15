@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useBreakpoints, breakpointsTailwind, onClickOutside } from '@vueuse/core'
+import { cn } from '~/lib/cn'
+
 interface IPickerOption {
   label: string
   value: string
@@ -7,46 +10,96 @@ interface IPickerOption {
 interface IProps {
   visible: boolean
   options: IPickerOption[]
-  selectedValue: string
+  selectedValue?: string
+  title?: string
 }
 
-defineProps<IProps>()
+const props = defineProps<IProps>()
 
 const emit = defineEmits<{
   'update:selectedValue': [value: string]
   accept: []
   cancel: []
 }>()
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const isDesktop = breakpoints.greaterOrEqual('lg')
+
+const pickerRef = ref(null)
+onClickOutside(pickerRef, () => {
+  if (isDesktop.value && props.visible) emit('cancel')
+})
+
+function handleSelect(val: string) {
+  emit('update:selectedValue', val)
+  if (isDesktop.value) emit('accept')
+}
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition name="fade">
-      <div v-if="visible" class="fixed inset-0 bg-black/40 z-50" @click="emit('cancel')" />
-    </Transition>
+  <Teleport to="body" :disabled="isDesktop">
+    <!-- MOBILE: Bottom Sheet -->
+    <template v-if="!isDesktop">
+      <Transition name="fade">
+        <div v-if="visible" class="fixed inset-0 bg-black/40 z-50 backdrop-blur-[2px]" @click="emit('cancel')" />
+      </Transition>
 
-    <Transition name="slide-up">
-      <div v-if="visible" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 overflow-hidden">
-        <div class="flex justify-center pt-3 pb-1">
-          <div class="w-10 h-1 rounded-full bg-gray-25" />
+      <Transition name="slide-up">
+        <div v-if="visible"
+          class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 overflow-hidden shadow-2xl max-h-[80vh] flex flex-col">
+          <div class="flex justify-center pt-3 pb-1">
+            <div class="w-10 h-1.5 rounded-full bg-gray-25" />
+          </div>
+
+          <div class="flex flex-row justify-between items-center px-base py-4 bg-gray-10 border-b border-gray-25">
+            <button type="button" @click="emit('cancel')">
+              <UiBaseText size="md" weight="semibold" color="blue">Cancelar</UiBaseText>
+            </button>
+
+            <UiBaseText v-if="title" size="md" weight="bold" color="secondary">
+              {{ title }}
+            </UiBaseText>
+
+            <button type="button" @click="emit('accept')">
+              <UiBaseText size="md" weight="semibold" color="blue">Aceptar</UiBaseText>
+            </button>
+          </div>
+
+          <div class="overflow-y-auto py-2">
+            <ul class="flex flex-col ">
+              <li v-for="option in options" :key="option.value" :class="cn(
+                'flex items-center justify-between px-base h-14 cursor-pointer transition-colors active:bg-gray-10',
+                option.value === selectedValue ? 'bg-gray-10/50' : ''
+              )" @click="emit('update:selectedValue', option.value)">
+                <UiBaseText size="base" :weight="option.value === selectedValue ? 'semibold' : 'regular'"
+                  :color="option.value === selectedValue ? 'secondary' : 'gray-60'">
+                  {{ option.label }}
+                </UiBaseText>
+
+                <Icon v-if="option.value === selectedValue" name="lucide:check"
+                  class="w-5 h-5 text-primary stroke-[3]" />
+              </li>
+            </ul>
+          </div>
+          <div class="h-8 bg-white" />
         </div>
+      </Transition>
+    </template>
 
-        <div class="flex flex-row justify-between items-center px-base py-sm bg-gray-21">
-          <button type="button" class="text-md font-semibold text-blue" @click="emit('accept')">
-            Aceptar
-          </button>
-          <button type="button" class="text-md font-semibold text-blue" @click="emit('cancel')">
-            Cancelar
-          </button>
-        </div>
-
-        <ul class="max-h-60 overflow-y-auto py-2">
-          <li v-for="option in options" :key="option.value"
-            class="flex items-center justify-center h-11 cursor-pointer hover:bg-gray-10 transition-colors" :class="{
-              'font-semibold text-secondary': option.value === selectedValue,
-              'font-normal text-gray-40': option.value !== selectedValue,
-            }" @click="emit('update:selectedValue', option.value)">
-            {{ option.label }}
+    <!-- DESKTOP: Dropdown -->
+    <Transition v-else name="fade-scale">
+      <div v-if="visible" ref="pickerRef"
+        class="absolute  top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-25 z-[60] py-2 overflow-hidden overflow-y-auto max-h-64">
+        <ul class="flex flex-col">
+          <li v-for="option in options" :key="option.value" :class="cn(
+            'flex  items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-10 transition-colors',
+            option.value === selectedValue ? 'bg-gray-10/50' : ''
+          )" @click="handleSelect(option.value)">
+            <UiBaseText size="base" :weight="option.value === selectedValue ? 'semibold' : 'regular'"
+              :color="option.value === selectedValue ? 'secondary' : 'gray-60'">
+              {{ option.label }}
+            </UiBaseText>
+            <Icon v-if="option.value === selectedValue" name="lucide:check" class="w-4 h-4 text-primary stroke-[3]" />
           </li>
         </ul>
       </div>
@@ -57,7 +110,7 @@ const emit = defineEmits<{
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,
@@ -66,15 +119,26 @@ const emit = defineEmits<{
 }
 
 .slide-up-enter-active {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .slide-up-leave-active {
-  transition: transform 0.22s cubic-bezier(0.4, 0, 1, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .slide-up-enter-from,
 .slide-up-leave-to {
   transform: translateY(100%);
+}
+
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
 }
 </style>

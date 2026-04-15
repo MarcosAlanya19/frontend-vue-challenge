@@ -1,37 +1,43 @@
 <script setup lang="ts">
+import { cn } from '~/lib/cn'
+
 type HighlightVariant = 'info' | 'warning'
 
 interface IProps {
   variant?: HighlightVariant
 }
 
-withDefaults(defineProps<IProps>(), {
+const props = withDefaults(defineProps<IProps>(), {
   variant: 'info',
 })
 
-const variantConfig: Record<HighlightVariant, { container: string; iconColor: string }> = {
+const variantClasses = {
   info: {
-    container: 'bg-blue-ultra-light',
-    iconColor: '#082774',
+    container: 'bg-blue-ultra-light border-blue/5',
+    icon: 'text-blue',
+    iconName: 'lucide:info'
   },
   warning: {
-    container: 'bg-brown-light',
-    iconColor: '#7B3F0A',
+    container: 'bg-brown-light border-brown/5',
+    icon: 'text-brown',
+    iconName: 'lucide:alert-circle'
   },
 }
+
+const config = computed(() => variantClasses[props.variant])
 </script>
 
 <template>
-  <div class="flex flex-row gap-3 p-3 rounded-xl items-center" :class="variantConfig[variant].container">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0"
-      :style="{ color: variantConfig[variant].iconColor }" viewBox="0 0 24 24" fill="currentColor">
-      <path fill-rule="evenodd"
-        d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 9a1 1 0 011 1v4a1 1 0 11-2 0v-4a1 1 0 011-1zm0-4a1 1 0 100 2 1 1 0 000-2z"
-        clip-rule="evenodd" />
-    </svg>
+  <div :class="cn(
+    'flex flex-row gap-3 p-3 rounded-xl items-center border transition-all duration-300',
+    config.container
+  )">
+    <Icon :name="config.iconName" :class="cn('w-5 h-5 shrink-0', config.icon)" />
 
-    <div class="flex-1 text-sm font-medium text-secondary">
-      <slot />
+    <div class="flex-1">
+      <UiBaseText as="p" size="sm" weight="medium" color="secondary">
+        <slot />
+      </UiBaseText>
     </div>
   </div>
 </template>

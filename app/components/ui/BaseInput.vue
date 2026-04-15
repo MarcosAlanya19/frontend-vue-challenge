@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn } from '~/utils/cn'
+import { cn } from '~/lib/cn'
 
 interface IProps {
   modelValue?: string

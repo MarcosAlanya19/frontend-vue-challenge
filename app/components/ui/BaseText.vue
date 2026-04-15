@@ -1,5 +1,7 @@
 <script setup lang="ts">
-export type TextSize = 'sm' | 'base' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
+import { cn } from '~/lib/cn'
+
+export type TextSize = 'sm' | 'base' | 'md' | 'lg' | 'xl' | '2xl'
 export type TextWeight = 'regular' | 'medium' | 'semibold' | 'bold'
 export type TextColor =
   | 'primary'
@@ -20,9 +22,10 @@ interface IProps {
   weight?: TextWeight
   color?: TextColor
   as?: string
+  class?: string
 }
 
-withDefaults(defineProps<IProps>(), {
+const props = withDefaults(defineProps<IProps>(), {
   size: 'base',
   weight: 'regular',
   color: 'secondary',
@@ -36,7 +39,6 @@ const sizeClasses: Record<TextSize, string> = {
   lg: 'text-lg',
   xl: 'text-xl',
   '2xl': 'text-2xl',
-  '3xl': 'text-3xl'
 }
 
 const weightClasses: Record<TextWeight, string> = {
@@ -63,11 +65,13 @@ const colorClasses: Record<TextColor, string> = {
 </script>
 
 <template>
-  <component :is="as" :class="[
+  <component :is="as" :class="cn(
+    'tracking-[0]',
     sizeClasses[size],
     weightClasses[weight],
     colorClasses[color],
-  ]">
+    props.class
+  )">
     <slot />
   </component>
 </template>

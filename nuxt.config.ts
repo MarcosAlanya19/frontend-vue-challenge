@@ -28,7 +28,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ["vee-validate", "@vee-validate/zod", "zod"],
+      include: ["vee-validate", "@vee-validate/zod", "zod", "v-calendar"],
     },
   },
 
