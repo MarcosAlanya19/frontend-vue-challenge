@@ -32,7 +32,7 @@ onClickOutside(pickerRef, () => {
 
 function handleSelect(val: string) {
   emit('update:selectedValue', val)
-  if (isDesktop.value) emit('accept')
+  emit('accept')
 }
 </script>
 
@@ -47,37 +47,22 @@ function handleSelect(val: string) {
       <Transition name="slide-up">
         <div v-if="visible"
           class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 overflow-hidden shadow-2xl max-h-[80vh] flex flex-col">
-          <div class="flex justify-center pt-3 pb-1">
+          <div class="flex justify-center pt-3 pb-2">
             <div class="w-10 h-1.5 rounded-full bg-gray-25" />
           </div>
 
-          <div class="flex flex-row justify-between items-center px-base py-4 bg-gray-10 border-b border-gray-25">
-            <button type="button" @click="emit('cancel')">
-              <UiBaseText size="md" weight="semibold" color="blue">Cancelar</UiBaseText>
-            </button>
-
-            <UiBaseText v-if="title" size="md" weight="bold" color="secondary">
-              {{ title }}
-            </UiBaseText>
-
-            <button type="button" @click="emit('accept')">
-              <UiBaseText size="md" weight="semibold" color="blue">Aceptar</UiBaseText>
-            </button>
+          <div v-if="title" class="px-9 pb-3 border-b border-gray-25">
+            <UiBaseText size="base" weight="bold" color="secondary">{{ title }}</UiBaseText>
           </div>
 
           <div class="overflow-y-auto py-2">
             <ul class="flex flex-col ">
-              <li v-for="option in options" :key="option.value" :class="cn(
-                'flex items-center justify-between px-base h-14 cursor-pointer transition-colors active:bg-gray-10',
-                option.value === selectedValue ? 'bg-gray-10/50' : ''
-              )" @click="emit('update:selectedValue', option.value)">
-                <UiBaseText size="base" :weight="option.value === selectedValue ? 'semibold' : 'regular'"
-                  :color="option.value === selectedValue ? 'secondary' : 'gray-60'">
+              <li v-for="option in options" :key="option.value"
+                class="flex items-center px-9 py-2 cursor-pointer transition-colors active:bg-gray-10"
+                @click="handleSelect(option.value)">
+                <UiBaseText size="base" weight="regular" color="gray-60">
                   {{ option.label }}
                 </UiBaseText>
-
-                <Icon v-if="option.value === selectedValue" name="lucide:check"
-                  class="w-5 h-5 text-primary stroke-[3]" />
               </li>
             </ul>
           </div>

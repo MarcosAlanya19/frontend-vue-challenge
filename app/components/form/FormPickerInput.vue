@@ -60,7 +60,7 @@ function handleCancel() {
         <Icon name="lucide:chevron-down" class="w-5 h-5 text-gray-40 shrink-0" />
       </button>
 
-      <UiBasePicker :visible="visible" :options="options" :selected-value="tempValue" :title="label"
+      <UiBaseWheelPicker :visible="visible" :options="options" :selected-value="tempValue"
         @update:selected-value="tempValue = $event" @accept="handleAccept" @cancel="handleCancel" />
     </div>
 

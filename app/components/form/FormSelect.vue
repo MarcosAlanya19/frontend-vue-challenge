@@ -2,17 +2,18 @@
 import { useField } from 'vee-validate'
 import { cn } from '~/lib/cn'
 
-export interface SelectOption {
+interface ISelectOption {
   label: string
   value: string
   subtitle?: string
+  shortLabel?: string
 }
 
 interface IProps {
   name: string
   label: string
-  sheetTitle: string
-  options: SelectOption[]
+  sheetTitle?: string
+  options: ISelectOption[]
   placeholder?: string
 }
 
@@ -41,7 +42,7 @@ function handleCancel() {
 
 <template>
   <div class="flex flex-col gap-1.5">
-    <UiBaseText size="sm" weight="medium" color="gray-60">
+    <UiBaseText size="base" class="lg:text-md" weight="medium" color="gray-66">
       {{ label }}
     </UiBaseText>
 
@@ -50,9 +51,9 @@ function handleCancel() {
         'flex flex-row items-center w-full h-12 px-3 rounded-lg border bg-white transition-all duration-200',
         errorMessage ? 'border-red ring-1 ring-red/10' : sheetVisible ? 'border-primary ring-1 ring-primary/10' : 'border-gray-25'
       )" @click="sheetVisible = !sheetVisible" @blur="handleBlur">
-        <UiBaseText class="flex-1 text-left truncate" size="base" :weight="selectedOption ? 'medium' : 'regular'"
-          :color="selectedOption ? 'secondary' : 'gray-40'">
-          {{ selectedOption?.label || placeholder }}
+        <UiBaseText class="flex-1 text-left truncate lg:text-md" size="base"
+          :weight="selectedOption ? 'medium' : 'regular'" :color="selectedOption ? 'secondary' : 'gray-40'">
+          {{ selectedOption?.shortLabel ?? selectedOption?.label ?? placeholder }}
         </UiBaseText>
 
         <Icon name="lucide:chevron-down"
@@ -60,7 +61,7 @@ function handleCancel() {
       </button>
 
       <!-- Nuxt auto-imports components/ui/BasePicker.vue as UiBasePicker -->
-      <UiBasePicker :visible="sheetVisible" :title="sheetTitle" :options="options" :selected-value="value"
+      <UiBasePicker :visible="sheetVisible" :title="sheetTitle ?? label" :options="options" :selected-value="value"
         @update:selected-value="onSelect" @accept="handleAccept" @cancel="handleCancel" />
     </div>
 
