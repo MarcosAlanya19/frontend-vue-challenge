@@ -10,6 +10,7 @@ export type TextColor =
   | 'secondary-lighter'
   | 'gray-40'
   | 'gray-60'
+  | 'gray-25'
   | 'gray-66'
   | 'red'
   | 'green'
@@ -54,6 +55,7 @@ const colorClasses: Record<TextColor, string> = {
   'secondary-light': 'text-secondary-light',
   'secondary-lighter': 'text-secondary-lighter',
   'gray-40': 'text-gray-40',
+  'gray-25': 'text-gray-25',
   'gray-60': 'text-gray-60',
   'gray-66': 'text-gray-66',
   red: 'text-red',
