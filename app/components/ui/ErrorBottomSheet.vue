@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { useErrorStore } from '~/stores/error'
 
-const SUPPORT_WHATSAPP = 'https://wa.me/51900000000'
+const SUPPORT_WHATSAPP = 'https://wa.me/51934737663'
 
 const errorStore = useErrorStore()
 const { error } = storeToRefs(errorStore)
@@ -25,7 +25,7 @@ const { error } = storeToRefs(errorStore)
           {{ error.title }}
         </UiBaseText>
 
-        <UiBaseText as="p" size="base" weight="regular" color="gray-60" class="text-center leading-6">
+        <UiBaseText as="p" size="md" weight="regular" color="secondary" class="text-center leading-6">
           {{ error.message }}
         </UiBaseText>
 
@@ -69,6 +69,7 @@ const { error } = storeToRefs(errorStore)
 }
 
 @media (min-width: 640px) {
+
   .slide-up-enter-from,
   .slide-up-leave-to {
     transform: translateY(-48%) scale(0.97);
