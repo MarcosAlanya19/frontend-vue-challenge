@@ -28,22 +28,34 @@ const documentNumberRules: Record<string, (n: string) => string | null> = {
 export const personalDataSchema = z
   .object({
     fullName: z
-      .string()
-      .min(1, "Requerido")
+      .string({ required_error: "El nombre completo es requerido" })
+      .min(1, "El nombre completo es requerido")
       .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, "Solo letras y espacios"),
-    documentType: z.string().min(1, "Requerido"),
-    documentNumber: z.string().min(1, "Requerido"),
-    phone: z.string().regex(/^\d{9}$/, "9 dígitos requeridos"),
+    documentType: z
+      .string({ required_error: "El tipo de documento es requerido" })
+      .min(1, "El tipo de documento es requerido"),
+    documentNumber: z
+      .string({ required_error: "El número de documento es requerido" })
+      .min(1, "El número de documento es requerido"),
+    phone: z
+      .string({ required_error: "El teléfono es requerido" })
+      .min(1, "El teléfono es requerido")
+      .regex(/^\d{9}$/, "9 dígitos requeridos"),
     birthDate: z
-      .string()
-      .min(1, "Requerido")
+      .string({ required_error: "La fecha de nacimiento es requerida" })
+      .min(1, "La fecha de nacimiento es requerida")
       .refine(isValidDate, "Fecha inválida")
-      .refine((v) => getAge(v) >= 18, "Debes ser mayor de edad"),
+      .refine((v) => !isValidDate(v) || getAge(v) >= 18, "Debes ser mayor de edad"),
     previousExchange: z.string().optional(),
-    termsAccepted: z.boolean().refine((v) => v, "Requerido"),
-    privacyAccepted: z.boolean().refine((v) => v, "Requerido"),
+    termsAccepted: z
+      .boolean({ required_error: "Debes aceptar los términos" })
+      .refine((v) => v, "Debes aceptar los términos"),
+    privacyAccepted: z
+      .boolean({ required_error: "Debes aceptar la política de privacidad" })
+      .refine((v) => v, "Debes aceptar la política de privacidad"),
   })
   .superRefine(({ documentType, documentNumber }, ctx) => {
+    if (!documentNumber) return;
     const rule = documentNumberRules[documentType];
     if (!rule) return;
     const error = rule(documentNumber);

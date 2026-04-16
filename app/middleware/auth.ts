@@ -1,7 +1,6 @@
 export default defineNuxtRouteMiddleware(() => {
-  if (import.meta.server) return;
-  const authStore = useAuthStore();
-  if (!authStore.isAuthenticated) {
+  const { isAuthenticated } = useAuthStore();
+  if (!isAuthenticated) {
     return navigateTo("/login", { replace: true });
   }
 });

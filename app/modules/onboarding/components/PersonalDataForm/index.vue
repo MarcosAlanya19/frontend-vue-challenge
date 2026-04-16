@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { toTypedSchema } from '@vee-validate/zod';
-import { Form, type GenericObject } from 'vee-validate';
+import { Form, useForm, type GenericObject } from 'vee-validate';
 import BaseButton from '~/components/ui/BaseButton.vue';
 import BaseHighlight from '~/components/ui/BaseHighlight.vue';
 import { DOC_TYPE_OPTIONS, PREVIOUS_EXCHANGE_OPTIONS } from '~/modules/onboarding/constants';
@@ -12,8 +12,16 @@ const emit = defineEmits<{
 
 const schema = toTypedSchema(personalDataSchema)
 
-const onSubmit = (values: GenericObject) => {
-  emit('submit', values as PersonalDataFormData)
+const { meta, validateField, values } = useForm({
+  validationSchema: toTypedSchema(personalDataSchema),
+})
+
+watch(() => values.documentType, () => {
+  if (values.documentNumber) validateField('documentNumber')
+})
+
+const onSubmit = (data: GenericObject) => {
+  emit('submit', data as PersonalDataFormData)
 }
 </script>
 
