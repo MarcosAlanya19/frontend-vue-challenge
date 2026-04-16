@@ -4,6 +4,7 @@ import type { ICalculate } from '../types/calculate.type'
 import type { IExchangeRate } from '../types/exchange-rate.type'
 import { EActiveField } from '../enums/active-field.enum'
 import { ECurrency } from '~/enums/currency.enum'
+import { formatMoney } from '~/lib/currency'
 import { getCurrencies } from '../lib/get-currencies'
 import { getKoins } from '../lib/get-koins'
 import CouponInput from './CouponInput.vue'
@@ -70,7 +71,7 @@ const performCalculate = async (value: string, field: EActiveField, compra: bool
   const result = await props.onCalculate({ originCurrency: origin, destinationCurrency: destination, amount })
   if (!result?.data.operate) return
 
-  const formatted = result.exchange.toFixed(2)
+  const formatted = formatMoney(result.exchange)
   if (field === EActiveField.Send) receiveAmount.value = formatted
   else sendAmount.value = formatted
   savings.value = result.savings.amount

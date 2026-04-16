@@ -1,22 +1,5 @@
 import { z } from "zod";
-
-const isValidDate = (value: string): boolean => {
-  const [d, m, y] = value.split("/");
-  if (!d || !m || !y || y.length !== 4) return false;
-  const date = new Date(`${y}-${m}-${d}`);
-  return !isNaN(date.getTime());
-};
-
-const getAge = (value: string): number => {
-  const [d, m, y] = value.split("/");
-  const birth = new Date(`${y}-${m}-${d}`);
-  const now = new Date();
-  let age = now.getFullYear() - birth.getFullYear();
-  const monthDiff = now.getMonth() - birth.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate()))
-    age--;
-  return age;
-};
+import { getAge, isValidDate } from "~/lib/date";
 
 const documentNumberRules: Record<string, (n: string) => string | null> = {
   DNI: (n) => (/^\d{8}$/.test(n) ? null : "8 dígitos requeridos"),

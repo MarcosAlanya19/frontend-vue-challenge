@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ECurrency } from '~/enums/currency.enum'
+import { formatMoney } from '~/lib/currency'
+import { getDeadlineTime } from '~/lib/date'
+import { ROUTES } from '~/constants/routes'
 import CopyButton from '../components/CopyButton.vue'
 import DetailRow from '../components/DetailRow.vue'
 
@@ -8,24 +11,20 @@ const koinsStore = useKoinsStore()
 const router = useRouter()
 
 if (!transactionStore.summary || !transactionStore.step1Data) {
-  router.replace('/')
+  router.replace(ROUTES.home)
 }
 
 const summary = computed(() => transactionStore.summary)
 
 const currencySymbol = (currency: string) => currency === ECurrency.USD ? '$' : 'S/'
 
-const updateTime = computed(() => {
-  const now = new Date()
-  now.setMinutes(now.getMinutes() + 15)
-  return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
-})
+const updateTime = computed(() => getDeadlineTime(15))
 
 const kambistaAccount = computed(() => {
   const sendCurrency = summary.value?.sendCurrency ?? ECurrency.USD
   return {
     bank: 'Interbank',
-    amount: `${currencySymbol(sendCurrency)} ${Number(summary.value?.sendAmount ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+    amount: `${currencySymbol(sendCurrency)} ${formatMoney(summary.value?.sendAmount ?? 0)}`,
     rawAmount: summary.value?.sendAmount ?? '0',
     accountNumber: '201010000000000',
     ruc: '20601708141',
@@ -39,7 +38,7 @@ function handleTransferred() {
     koinsStore.addKoins(summary.value.koins)
   }
   transactionStore.setTransactionId('mock-tx-' + Date.now())
-  router.push('/transaction/receipt')
+  router.push(ROUTES.transaction.receipt)
 }
 </script>
 

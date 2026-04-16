@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
+import { ROUTES } from '~/constants/routes'
 
 const transactionStore = useTransactionStore()
 const router = useRouter()
 
 if (!transactionStore.summary || !transactionStore.transactionId) {
-  router.replace('/')
+  router.replace(ROUTES.home)
 }
 
 const { handleSubmit, values } = useForm({
@@ -18,7 +19,7 @@ const { handleSubmit, values } = useForm({
 const isValid = computed(() => !!values.receiptFile && !!values.receiptUri)
 
 const onSubmit = handleSubmit(() => {
-  router.push('/transaction/success')
+  router.push(ROUTES.transaction.success)
 })
 </script>
 

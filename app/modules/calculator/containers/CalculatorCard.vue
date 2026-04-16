@@ -3,6 +3,7 @@ import CalculatorForm from '../components/CalculatorForm.vue'
 import { useCalculateExchange } from '../composables/useCalculateExchange'
 import { useExchangeRate } from '../composables/useExchangeRate'
 import type { TransactionSummary } from '~/stores/transaction'
+import { ROUTES } from '~/constants/routes'
 
 const { data: exchangeRate, isLoading: isLoadingRate, handle: fetchRate } = useExchangeRate()
 const { data: calcResult, isLoading: isCalculating, handle: calculate } = useCalculateExchange()
@@ -23,7 +24,7 @@ async function onCalculate(params: { originCurrency: string; destinationCurrency
 
 function handleStart(summary: TransactionSummary) {
   transactionStore.setSummary(summary)
-  router.push('/transaction/create')
+  router.push(ROUTES.transaction.create)
 }
 </script>
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import { ECurrency } from '~/enums/currency.enum'
+import { ROUTES } from '~/constants/routes'
 import AccountSelectorField from '../components/AccountSelectorField.vue'
 import SummaryCard from '../components/SummaryCard.vue'
 import { useGetBankAccounts } from '../composables/useGetBankAccounts'
@@ -10,7 +11,7 @@ const transactionStore = useTransactionStore()
 const router = useRouter()
 
 if (!transactionStore.summary) {
-  router.replace('/')
+  router.replace(ROUTES.home)
 }
 
 const summary = computed(() => transactionStore.summary)
@@ -54,7 +55,7 @@ const onSubmit = handleSubmit(() => {
     destinationAccountLabel: selectedAccountLabel.value,
     sourceFundId: values.sourceFundId,
   })
-  router.push('/transaction/transfer')
+  router.push(ROUTES.transaction.transfer)
 })
 </script>
 

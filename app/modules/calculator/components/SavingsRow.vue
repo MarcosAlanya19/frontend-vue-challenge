@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { formatKoins } from '~/lib/currency'
+
 defineProps<{ savings: string; koins: number }>()
 </script>
 
@@ -14,7 +16,7 @@ defineProps<{ savings: string; koins: number }>()
       <div class="flex items-center gap-xs justify-end mt-0.5">
         <Icon name='lucide:info' />
 
-        <UiBaseText size="base" weight="semibold" color="secondary">{{ koins.toLocaleString() }}</UiBaseText>
+        <UiBaseText size="base" weight="semibold" color="secondary">{{ formatKoins(koins) }}</UiBaseText>
         <img src="/images/coin.png" alt="Koinks" width="16" height="16" loading="lazy" />
       </div>
     </div>

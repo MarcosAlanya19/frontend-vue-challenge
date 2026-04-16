@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { cn } from '~/lib/cn'
+import { ROUTES } from '~/constants/routes'
 
 const authStore = useAuthStore()
 const koinsStore = useKoinsStore()
@@ -7,14 +8,14 @@ const router = useRouter()
 const route = useRoute()
 
 const NAV_ITEMS = [
-  { label: 'Inicio', path: '/', icon: resolveComponent('IconsHomeSvg') },
-  { label: 'Historial de operaciones', path: '/history', icon: resolveComponent('IconsHistorySvg') },
-  { label: 'Cuentas bancarias', path: '/accounts', icon: resolveComponent('IconsCardSvg') },
-  { label: 'Regala y gana', path: '/referrals', icon: resolveComponent('IconsCouponSvg') },
-  { label: 'Kambista beneficios', path: '/benefits', icon: resolveComponent('IconsOfertSvg') },
-  { label: 'Alertas de tipo de cambio', path: '/alerts', icon: resolveComponent('IconsTypeChangesSvg') },
-  { label: 'Kambi Koinks', path: '/koinks', badge: 'NUEVO', icon: resolveComponent('IconsCoinSvg') },
-  { label: 'Ayuda', path: '/help', icon: resolveComponent('IconsHelpSvg') },
+  { label: 'Inicio', path: ROUTES.home, icon: resolveComponent('IconsHomeSvg') },
+  { label: 'Historial de operaciones', path: ROUTES.history, icon: resolveComponent('IconsHistorySvg') },
+  { label: 'Cuentas bancarias', path: ROUTES.accounts, icon: resolveComponent('IconsCardSvg') },
+  { label: 'Regala y gana', path: ROUTES.referrals, icon: resolveComponent('IconsCouponSvg') },
+  { label: 'Kambista beneficios', path: ROUTES.benefits, icon: resolveComponent('IconsOfertSvg') },
+  { label: 'Alertas de tipo de cambio', path: ROUTES.alerts, icon: resolveComponent('IconsTypeChangesSvg') },
+  { label: 'Kambi Koinks', path: ROUTES.koinks, badge: 'NUEVO', icon: resolveComponent('IconsCoinSvg') },
+  { label: 'Ayuda', path: ROUTES.help, icon: resolveComponent('IconsHelpSvg') },
 ]
 
 const mobileMenuOpen = ref(false)
@@ -40,7 +41,7 @@ const userName = computed(() => authStore.user?.email?.split('@')?.[0]?.toUpperC
 
 function handleLogout() {
   authStore.logout()
-  router.replace('/login')
+  router.replace(ROUTES.login)
 }
 
 function isActive(path: string) {

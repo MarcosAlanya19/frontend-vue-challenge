@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { TransactionSummary } from '~/stores/transaction'
 import SummaryRow from './SummaryRow.vue'
-import { ECurrency } from '~/enums/currency.enum';
+import { ECurrency } from '~/enums/currency.enum'
+import { formatRate } from '~/lib/currency'
 
 interface IProps {
   summary: TransactionSummary
@@ -19,8 +20,8 @@ const displayReceive = computed(() =>
   `${currencySymbol(props.summary.receiveCurrency)} ${props.summary.receiveAmount}`
 )
 
-const displayBuyRate = computed(() => props.summary.buyRate.toFixed(2))
-const displaySellRate = computed(() => props.summary.sellRate.toFixed(2))
+const displayBuyRate = computed(() => formatRate(props.summary.buyRate))
+const displaySellRate = computed(() => formatRate(props.summary.sellRate))
 </script>
 
 <template>

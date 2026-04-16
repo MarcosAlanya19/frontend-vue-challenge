@@ -28,25 +28,23 @@ const accountTypeOptions = [
 
 const bankOptions = getBankAccounts()
 
-const selectedCurrency = ref<ECurrency>(ECurrency.PEN)
-
 const digitsOnly = (value: string) => value.replace(/\D/g, '')
 
-const { handleSubmit, values, resetForm, meta } = useForm({
+const { handleSubmit, values, resetForm, meta, setFieldValue } = useForm({
   validationSchema: toTypedSchema(addAccountSchema),
   initialValues: {
     accountType: '',
     accountNumber: '',
     bankId: '',
     alias: '',
+    currency: props.currency,
     ownerConfirm: false,
   },
 })
 
 watch(() => props.visible, (v) => {
   if (v) {
-    resetForm()
-    selectedCurrency.value = props.currency
+    resetForm({ values: { currency: props.currency } })
   }
 })
 
@@ -121,16 +119,16 @@ const onSubmit = handleSubmit((submittedValues) => {
                   <UiBaseText size="base" weight="medium" color="gray-60">Moneda</UiBaseText>
                   <div class="grid grid-cols-2  gap-3">
                     <button type="button" class="h-10 px-8 rounded-lg transition-colors"
-                      :class="selectedCurrency === ECurrency.PEN ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                      @click="selectedCurrency = ECurrency.PEN">
+                      :class="values.currency === ECurrency.PEN ? 'bg-secondary' : 'border border-gray-25 bg-white'"
+                      @click="setFieldValue('currency', ECurrency.PEN)">
                       <UiBaseText size="sm" weight="medium"
-                        :color="selectedCurrency === ECurrency.PEN ? 'white' : 'gray-40'">SOLES</UiBaseText>
+                        :color="values.currency === ECurrency.PEN ? 'white' : 'gray-40'">SOLES</UiBaseText>
                     </button>
                     <button type="button" class="h-10 px-8 rounded-lg transition-colors"
-                      :class="selectedCurrency === ECurrency.USD ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                      @click="selectedCurrency = ECurrency.USD">
+                      :class="values.currency === ECurrency.USD ? 'bg-secondary' : 'border border-gray-25 bg-white'"
+                      @click="setFieldValue('currency', ECurrency.USD)">
                       <UiBaseText size="sm" weight="medium"
-                        :color="selectedCurrency === ECurrency.USD ? 'white' : 'gray-40'">DÓLARES</UiBaseText>
+                        :color="values.currency === ECurrency.USD ? 'white' : 'gray-40'">DÓLARES</UiBaseText>
                     </button>
                   </div>
                 </div>
@@ -169,16 +167,16 @@ const onSubmit = handleSubmit((submittedValues) => {
                 <UiBaseText size="base" weight="medium" color="gray-60">Moneda</UiBaseText>
                 <div class="grid grid-cols-2 gap-3">
                   <button type="button" class="flex-1 h-12 rounded-lg transition-colors"
-                    :class="selectedCurrency === ECurrency.PEN ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                    @click="selectedCurrency = ECurrency.PEN">
+                    :class="values.currency === ECurrency.PEN ? 'bg-secondary' : 'border border-gray-25 bg-white'"
+                    @click="setFieldValue('currency', ECurrency.PEN)">
                     <UiBaseText size="sm" weight="medium"
-                      :color="selectedCurrency === ECurrency.PEN ? 'white' : 'gray-40'">SOLES</UiBaseText>
+                      :color="values.currency === ECurrency.PEN ? 'white' : 'gray-40'">SOLES</UiBaseText>
                   </button>
                   <button type="button" class="flex-1 h-12 rounded-lg transition-colors"
-                    :class="selectedCurrency === ECurrency.USD ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                    @click="selectedCurrency = ECurrency.USD">
+                    :class="values.currency === ECurrency.USD ? 'bg-secondary' : 'border border-gray-25 bg-white'"
+                    @click="setFieldValue('currency', ECurrency.USD)">
                     <UiBaseText size="sm" weight="medium"
-                      :color="selectedCurrency === ECurrency.USD ? 'white' : 'gray-40'">DÓLARES</UiBaseText>
+                      :color="values.currency === ECurrency.USD ? 'white' : 'gray-40'">DÓLARES</UiBaseText>
                   </button>
                 </div>
               </div>

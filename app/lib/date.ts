@@ -24,6 +24,9 @@ export const formatDate = (text: string): string => {
 
 export const getUpdateTime = (): string => dayjs().format("HH:mm");
 
+export const getDeadlineTime = (minutesFromNow: number): string =>
+  dayjs().add(minutesFromNow, "minute").format("HH:mm");
+
 export const dmyToISO = (dmy: string): string =>
   isValidDate(dmy) ? parseDMY(dmy).format("YYYY-MM-DD") : "";
 

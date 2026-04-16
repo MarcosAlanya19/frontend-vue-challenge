@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ROUTES } from "~/constants/routes";
+
 const route = useRoute();
 const router = useRouter();
 
@@ -23,7 +25,7 @@ const name = computed(() => (route.query.name as string) || "");
     </div>
 
     <div class="w-full pt-2">
-      <UiBaseButton label="Continuar" @click="router.replace('/login')" />
+      <UiBaseButton label="Continuar" @click="router.replace(ROUTES.login)" />
     </div>
   </div>
 </template>

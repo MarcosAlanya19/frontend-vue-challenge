@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ECurrency } from '~/enums/currency.enum'
+import { ROUTES } from '~/constants/routes'
 import DetailRow from '../components/DetailRow.vue'
 
 const transactionStore = useTransactionStore()
 const router = useRouter()
 
 if (!transactionStore.summary) {
-  router.replace('/')
+  router.replace(ROUTES.home)
 }
 
 const summary = computed(() => transactionStore.summary)
@@ -15,7 +16,7 @@ const kambistaCode = computed(() => 'km' + (transactionStore.transactionId?.slic
 
 function handleGoHome() {
   transactionStore.reset()
-  router.replace('/')
+  router.replace(ROUTES.home)
 }
 </script>
 

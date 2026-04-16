@@ -6,10 +6,12 @@ interface Props {
   isCompra: boolean
 }
 
+import { formatRate } from '~/lib/currency'
+
 defineProps<Props>()
 const emit = defineEmits<{ (e: 'toggle', isCompra: boolean): void }>()
 
-const fmt = (n: number) => n > 0 ? n.toFixed(3) : '—'
+const fmt = (n: number) => n > 0 ? formatRate(n) : '—'
 </script>
 
 <template>

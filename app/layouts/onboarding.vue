@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { ROUTES } from '~/constants/routes'
+
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
 function handleLogout() {
   authStore.logout()
-  router.replace('/login')
+  router.replace(ROUTES.login)
 }
 </script>
 
