@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const { public: { apiBaseUrl } } = useRuntimeConfig();
+
 export const api = axios.create({
-  baseURL: "https://api.kambista.com/v1",
+  baseURL: apiBaseUrl,
   headers: {
     "Content-Type": "application/json",
   },
