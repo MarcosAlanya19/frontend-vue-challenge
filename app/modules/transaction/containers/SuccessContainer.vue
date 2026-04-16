@@ -27,7 +27,7 @@ function handleGoHome() {
         <div class="flex flex-col items-center p-5 lg:p-8 gap-4">
 
           <div class="w-24 h-24 flex items-center justify-center">
-            <img src="/images/happy-pig.png" alt="happy-pig" width="103" height="97" class="object-contain" />
+            <img src="/images/happy-pig.png" alt="Operación exitosa" width="103" height="97" class="object-contain" loading="lazy" />
           </div>
 
           <UiBaseText size="xl" weight="bold" color="secondary" as="h2" class="text-center">
@@ -52,9 +52,9 @@ function handleGoHome() {
       <div
         class="w-full h-20 rounded-xl overflow-hidden flex items-center justify-center px-4 lg:px-6 relative shadow-sm"
         style="background: linear-gradient(64.32deg, #B28FD9 20.26%, #F0979E 52.95%, #FCC48C 101.24%);">
-        <img src="/images/piggy-glasses.png" alt="pig" width="71" height="88"
+        <img src="/images/piggy-glasses.png" alt="Kambista beneficios" width="71" height="88" loading="lazy"
           class="absolute -left-6 -bottom-6 object-contain rotate-12" />
-        <img src="/images/gift.png" alt="gift" width="63" height="66"
+        <img src="/images/gift.png" alt="Regalos" width="63" height="66" loading="lazy"
           class="absolute -right-2 -bottom-2 object-contain -rotate-12" />
         <div class="flex flex-col justify-center gap-0.5 text-center z-10">
           <UiBaseText size="base" weight="bold" color="secondary" class="leading-tight">

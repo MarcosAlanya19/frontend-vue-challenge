@@ -2,6 +2,7 @@
 import CalculatorCard from '~/modules/calculator/containers/CalculatorCard.vue'
 
 definePageMeta({ layout: 'main', middleware: ['auth'] })
+useSeoMeta({ title: 'Inicio - Kambista', description: 'Cotiza y cambia dólares al mejor tipo de cambio en tiempo real.' })
 </script>
 
 <template>

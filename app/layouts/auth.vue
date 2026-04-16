@@ -12,7 +12,7 @@
         <!-- Features -->
         <div class="flex flex-col gap-12">
           <div class="flex items-start gap-6">
-            <img src="/images/quote-operation.png" alt="Cotiza" width="70" height="60" class="object-contain" />
+            <img src="/images/quote-operation.png" alt="Cotiza" width="70" height="60" class="object-contain" loading="lazy" />
             <div>
               <UiBaseText as="p" size="xl" weight="bold" color="white" class="mb-1">Cotiza tu operación</UiBaseText>
               <UiBaseText as="p" size="md" color="white" weight="semibold">
@@ -24,7 +24,7 @@
           </div>
 
           <div class="flex items-start gap-6">
-            <img src="/images/make-transfer.png" alt="Transfiere" width="70" height="60" class="object-contain" />
+            <img src="/images/make-transfer.png" alt="Transfiere" width="70" height="60" class="object-contain" loading="lazy" />
             <div>
               <UiBaseText as="p" size="xl" weight="bold" color="white" class="mb-1">Realiza la transferencia
               </UiBaseText>
@@ -39,7 +39,7 @@
           </div>
 
           <div class="flex items-start gap-6">
-            <img src="/images/get-money.png" alt="Recibe" width="70" height="60" class="object-contain" />
+            <img src="/images/get-money.png" alt="Recibe" width="70" height="60" class="object-contain" loading="lazy" />
             <div>
               <UiBaseText as="p" size="xl" color="white" weight="bold" class="mb-1">Obtén tu dinero</UiBaseText>
               <UiBaseText as="p" size="md" color="white" weight="semibold">

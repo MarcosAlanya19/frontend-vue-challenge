@@ -35,5 +35,4 @@ const onSubmit = async (formData: PersonalDataFormData) => {
     <PersonalDataForm @submit="onSubmit" />
   </div>
 
-  <UiErrorBottomSheet />
 </template>

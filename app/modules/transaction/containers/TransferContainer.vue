@@ -56,7 +56,7 @@ function handleTransferred() {
         <div class="flex flex-col items-center px-5 lg:px-8 py-5 lg:py-8 gap-4">
 
           <div class="w-20 h-auto flex items-center justify-center">
-            <img src="/images/transfiere.png" alt="Transfiere" width="77" height="83" class="object-contain" />
+            <img src="/images/transfiere.png" alt="Transfiere a Kambista" width="77" height="83" class="object-contain" loading="lazy" />
           </div>
 
           <UiBaseText size="xl" weight="bold" color="secondary" as="h2" class="text-center hidden lg:block">

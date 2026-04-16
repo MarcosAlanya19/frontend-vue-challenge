@@ -2,6 +2,7 @@
 import CreateTransactionContainer from '~/modules/transaction/containers/CreateTransactionContainer.vue'
 
 definePageMeta({ layout: 'transaction', middleware: ['auth'] })
+useSeoMeta({ title: 'Completa tu operación - Kambista' })
 </script>
 
 <template>

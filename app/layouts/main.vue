@@ -110,7 +110,7 @@ function isActive(path: string) {
           <UiBaseText size="base" weight="medium" color="secondary">Tienes</UiBaseText>
           <UiBaseText size="base" weight="bold" color="secondary">{{ koinsStore.totalKoins }}</UiBaseText>
           <UiBaseText size="base" weight="medium" color="secondary">Koinks</UiBaseText>
-          <img src="/images/coin.png" width="20" height="20" />
+          <img src="/images/coin.png" alt="Koinks" width="20" height="20" loading="lazy" />
         </div>
 
         <div data-user-menu class="relative flex items-center gap-2 border-l border-gray-25 pl-4">

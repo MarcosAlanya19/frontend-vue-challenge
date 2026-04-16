@@ -30,7 +30,7 @@ const onSubmit = handleSubmit(() => {
         <div class="flex flex-col items-center p-5 lg:p-8 gap-4">
 
           <div class="w-32 h-auto flex items-center justify-center">
-            <img src="/images/voucher.png" alt="Voucher" width="130" height="70" class="object-contain" />
+            <img src="/images/voucher.png" alt="Envía tu constancia" width="130" height="70" class="object-contain" loading="lazy" />
           </div>
 
           <UiBaseText size="xl" weight="bold" color="secondary" as="h2" class="hidden lg:block text-center">

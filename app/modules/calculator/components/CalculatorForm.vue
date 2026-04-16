@@ -12,14 +12,14 @@ import PromoBanner from './PromoBanner.vue'
 import RateTabs from './RateTabs.vue'
 import SavingsRow from './SavingsRow.vue'
 
-interface Props {
+interface IProps {
   exchangeRate: IExchangeRate | null
   isLoadingRate: boolean
   isCalculating: boolean
   onCalculate: (params: { originCurrency: string; destinationCurrency: string; amount: number }) => Promise<ICalculate | null>
 }
 
-const props = defineProps<Props>()
+const props = defineProps<IProps>()
 
 const emit = defineEmits<{
   start: [summary: {

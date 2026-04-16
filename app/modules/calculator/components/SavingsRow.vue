@@ -15,7 +15,7 @@ defineProps<{ savings: string; koins: number }>()
         <Icon name='lucide:info' />
 
         <UiBaseText size="base" weight="semibold" color="secondary">{{ koins.toLocaleString() }}</UiBaseText>
-        <img src="/images/coin.png" />
+        <img src="/images/coin.png" alt="Koinks" width="16" height="16" loading="lazy" />
       </div>
     </div>
   </div>

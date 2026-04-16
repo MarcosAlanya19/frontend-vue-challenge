@@ -6,6 +6,7 @@ definePageMeta({
   middleware: ["guest"],
   hideBackButton: true,
 });
+useSeoMeta({ title: "Registro exitoso - Kambista" });
 </script>
 
 <template>

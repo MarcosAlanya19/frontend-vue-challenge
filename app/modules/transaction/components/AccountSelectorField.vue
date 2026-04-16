@@ -3,7 +3,7 @@ import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useField } from 'vee-validate'
 import { cn } from '~/lib/cn'
 import { ECurrency } from '~/enums/currency.enum'
-import AddAccountModal from '~/modules/transaction/components/AddAccountModal.vue'
+import AddAccountModal from '~/modules/transaction/components/AddAccountModal/index.vue'
 
 interface IAccountOption {
   label: string
