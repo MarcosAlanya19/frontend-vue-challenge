@@ -1,8 +1,11 @@
+<script setup lang="ts">
+import CalculatorCard from '~/modules/calculator/containers/CalculatorCard.vue'
+
+definePageMeta({ layout: 'main', middleware: ['auth'] })
+</script>
+
 <template>
-  <div class="flex items-center justify-center min-h-screen">
-    <div class="text-center">
-      <h1 class="text-3xl font-bold text-kambista-orange">Kambista</h1>
-      <p class="mt-2 text-gray-600">Aplicación de intercambio de divisas</p>
-    </div>
+  <div class="w-full h-full overflow-y-auto pt-6 lg:pt-10">
+    <CalculatorCard />
   </div>
 </template>

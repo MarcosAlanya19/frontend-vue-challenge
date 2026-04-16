@@ -1,5 +1,5 @@
 import type { EDocumentType } from "~/modules/auth/enums/document-type.enum";
-import type { ECurrency } from "~/modules/calculator/enums/currency.enum";
+import type { ECurrency } from "~/enums/currency.enum";
 
 export interface APIError {
   success: false;
