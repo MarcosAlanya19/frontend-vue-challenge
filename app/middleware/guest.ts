@@ -1,7 +1,9 @@
-export default defineNuxtRouteMiddleware(() => {
-  if (import.meta.server) return;
+export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
-  if (authStore.isAuthenticated) {
-    return navigateTo("/", { replace: true });
+
+  if (import.meta.client && authStore.isAuthenticated) {
+    if (to.path !== "/") {
+      return navigateTo("/", { replace: true });
+    }
   }
 });
