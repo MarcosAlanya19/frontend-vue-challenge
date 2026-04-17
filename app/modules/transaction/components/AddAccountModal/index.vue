@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useForm } from 'vee-validate'
+import { Form } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { ECurrency } from '~/enums/currency.enum'
-import { getBankAccounts } from '~/modules/transaction/services/get-bank-accounts.services'
-import { addAccountSchema } from './index.schema'
+import { useGetBankAccounts } from '~/modules/transaction/composables/useGetBankAccounts'
+import { ACCOUNT_TYPE_OPTIONS } from '~/modules/transaction/constants/account-type-options'
+import { addAccountSchema, type AddAccountFormData } from './index.schema'
 
 interface IProps {
   visible: boolean
@@ -21,43 +22,29 @@ const emit = defineEmits<{ close: [], created: [account: ICreatedAccount] }>()
 
 const currencyLabel = computed(() => props.currency === ECurrency.PEN ? 'Soles' : 'Dólares')
 
-const accountTypeOptions = [
-  { label: 'Cuenta de Ahorros', value: 'savings' },
-  { label: 'Cuenta Corriente', value: 'checking' },
-]
+const { data: bankOptions, handle: loadBankOptions } = useGetBankAccounts()
+const validationSchema = toTypedSchema(addAccountSchema)
+const initialValues = computed(() => ({
+  accountType: '',
+  accountNumber: '',
+  bankId: '',
+  alias: '',
+  currency: props.currency,
+  ownerConfirm: false,
+}))
 
-const bankOptions = getBankAccounts()
-
-const digitsOnly = (value: string) => value.replace(/\D/g, '')
-
-const { handleSubmit, values, resetForm, meta, setFieldValue } = useForm({
-  validationSchema: toTypedSchema(addAccountSchema),
-  initialValues: {
-    accountType: '',
-    accountNumber: '',
-    bankId: '',
-    alias: '',
-    currency: props.currency,
-    ownerConfirm: false,
-  },
+onMounted(() => {
+  loadBankOptions()
 })
 
-watch(() => props.visible, (v) => {
-  if (v) {
-    resetForm({ values: { currency: props.currency } })
-  }
-})
-
-const isFormValid = computed(() => meta.value.valid)
-
-const onSubmit = handleSubmit((submittedValues) => {
+const onSubmit = (submittedValues: AddAccountFormData) => {
   emit('created', {
     label: submittedValues.alias,
     value: `acc-${Date.now()}`,
     subtitle: submittedValues.accountNumber,
   })
   emit('close')
-})
+}
 </script>
 
 <template>
@@ -94,20 +81,19 @@ const onSubmit = handleSubmit((submittedValues) => {
           </div>
 
           <!-- Body -->
-          <form class="flex-1  px-6 lg:px-11  py-6 flex flex-col gap-6" @submit.prevent="onSubmit">
+          <Form v-slot="{ meta, values, setFieldValue }" :validation-schema="validationSchema"
+            :initial-values="initialValues" class="flex-1  px-6 lg:px-11  py-6 flex flex-col gap-6" @submit="onSubmit">
             <!-- Notice -->
             <UiBaseText as="p" size="md" class="lg:text-lg" color="secondary">
               La cuenta que registres <UiBaseText weight="bold" size="md" class="lg:text-lg">debe estar a tu nombre
-              </UiBaseText> (titular de este
-              perfil en Kambista)
+              </UiBaseText> (titular de este perfil en Kambista)
             </UiBaseText>
 
-            <!-- Desktop: two explicit columns -->
-            <div class="hidden lg:flex gap-5">
-              <!-- Left column -->
+            <div class="flex flex-col lg:flex-row gap-5">
+              <!-- Left / Top -->
               <div class="flex-1 flex flex-col gap-5">
                 <FormSelect name="accountType" label="Tipo de cuenta" sheet-title="Tipo de cuenta"
-                  :options="accountTypeOptions" placeholder="Selecciona" />
+                  :options="ACCOUNT_TYPE_OPTIONS" placeholder="Selecciona" />
                 <FormSelect name="bankId" label="Banco" sheet-title="Selecciona tu banco" :options="bankOptions"
                   placeholder="Selecciona" />
                 <UiBaseHighlight variant="info">
@@ -117,16 +103,16 @@ const onSubmit = handleSubmit((submittedValues) => {
                 </UiBaseHighlight>
                 <div class="flex flex-col gap-2">
                   <UiBaseText size="base" weight="medium" color="gray-60">Moneda</UiBaseText>
-                  <div class="grid grid-cols-2  gap-3">
-                    <button type="button" class="h-10 px-8 rounded-lg transition-colors"
+                  <div class="grid grid-cols-2 gap-3">
+                    <button type="button" class="h-12 lg:h-10 px-8 rounded-lg transition-colors"
                       :class="values.currency === ECurrency.PEN ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                      @click="setFieldValue('currency', ECurrency.PEN)">
+                      @click="setFieldValue('currency', ECurrency.PEN, true)">
                       <UiBaseText size="sm" weight="medium"
                         :color="values.currency === ECurrency.PEN ? 'white' : 'gray-40'">SOLES</UiBaseText>
                     </button>
-                    <button type="button" class="h-10 px-8 rounded-lg transition-colors"
+                    <button type="button" class="h-12 lg:h-10 px-8 rounded-lg transition-colors"
                       :class="values.currency === ECurrency.USD ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                      @click="setFieldValue('currency', ECurrency.USD)">
+                      @click="setFieldValue('currency', ECurrency.USD, true)">
                       <UiBaseText size="sm" weight="medium"
                         :color="values.currency === ECurrency.USD ? 'white' : 'gray-40'">DÓLARES</UiBaseText>
                     </button>
@@ -134,10 +120,10 @@ const onSubmit = handleSubmit((submittedValues) => {
                 </div>
               </div>
 
-              <!-- Right column -->
+              <!-- Right / Bottom -->
               <div class="flex-1 flex flex-col gap-5">
                 <FormInput name="accountNumber" label="Número de cuenta" placeholder="Escribe tu cuenta destino"
-                  :formatter="digitsOnly" />
+                  numeric-only />
                 <FormInput name="alias" label="Ponle nombre a tu cuenta" placeholder="Escribe un alias" />
                 <FormCheckbox name="ownerConfirm">
                   <UiBaseText size="sm" weight="bold" color="secondary">
@@ -148,47 +134,10 @@ const onSubmit = handleSubmit((submittedValues) => {
                     *Es obligatorio que la cuenta esté a tu nombre para que el cambio sea exitoso
                   </UiBaseText>
                 </FormCheckbox>
-                <UiBaseButton label="Agregar y usar" type="submit" :disabled="!isFormValid" />
+                <UiBaseButton label="Agregar y usar" type="submit" :disabled="!meta.valid" />
               </div>
             </div>
-
-            <!-- Mobile: single column -->
-            <div class="flex lg:hidden flex-col gap-5">
-              <FormSelect name="accountType" label="Tipo de cuenta bancaria" sheet-title="Tipo de cuenta"
-                :options="accountTypeOptions" placeholder="Selecciona" />
-              <FormSelect name="bankId" label="Entidad financiera" sheet-title="Selecciona tu banco"
-                :options="bankOptions" placeholder="Selecciona" />
-              <UiBaseHighlight variant="info">
-                <UiBaseText color="blue" size="sm" weight="medium">
-                  Operamos en Lima con todos los bancos. Y en provincia con el BCP y cuentas digitales Interbank.
-                </UiBaseText>
-              </UiBaseHighlight>
-              <div class="flex flex-col gap-2">
-                <UiBaseText size="base" weight="medium" color="gray-60">Moneda</UiBaseText>
-                <div class="grid grid-cols-2 gap-3">
-                  <button type="button" class="flex-1 h-12 rounded-lg transition-colors"
-                    :class="values.currency === ECurrency.PEN ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                    @click="setFieldValue('currency', ECurrency.PEN)">
-                    <UiBaseText size="sm" weight="medium"
-                      :color="values.currency === ECurrency.PEN ? 'white' : 'gray-40'">SOLES</UiBaseText>
-                  </button>
-                  <button type="button" class="flex-1 h-12 rounded-lg transition-colors"
-                    :class="values.currency === ECurrency.USD ? 'bg-secondary' : 'border border-gray-25 bg-white'"
-                    @click="setFieldValue('currency', ECurrency.USD)">
-                    <UiBaseText size="sm" weight="medium"
-                      :color="values.currency === ECurrency.USD ? 'white' : 'gray-40'">DÓLARES</UiBaseText>
-                  </button>
-                </div>
-              </div>
-              <FormInput name="accountNumber" label="Número de cuenta" placeholder="Escribe tu cuenta de destino"
-                :formatter="digitsOnly" />
-              <FormInput name="alias" label="Ponle nombre a tu cuenta" placeholder="Escribe un alias" />
-              <FormCheckbox name="ownerConfirm">
-                <UiBaseText size="sm" color="secondary">Declaro que esta cuenta es mia</UiBaseText>
-              </FormCheckbox>
-              <UiBaseButton label="Guardar cuenta" type="submit" :disabled="!isFormValid" />
-            </div>
-          </form>
+          </Form>
         </div>
       </div>
     </Transition>

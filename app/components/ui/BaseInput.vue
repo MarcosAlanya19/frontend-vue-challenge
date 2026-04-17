@@ -8,15 +8,18 @@ interface IProps {
   placeholder?: string
   isPassword?: boolean
   type?: string
+  inputmode?: string
 }
 
 withDefaults(defineProps<IProps>(), {
   isPassword: false,
   type: 'text',
+  inputmode: undefined,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
+  'blur': []
 }>()
 
 const focused = ref(false)
@@ -24,6 +27,11 @@ const showPassword = ref(false)
 
 const onInput = (event: Event) => {
   emit('update:modelValue', (event.target as HTMLInputElement).value)
+}
+
+const onBlur = () => {
+  focused.value = false
+  emit('blur')
 }
 </script>
 
@@ -46,9 +54,9 @@ const onInput = (event: Event) => {
 
       <!-- Input Field -->
       <input :type="isPassword ? (showPassword ? 'text' : 'password') : type" :value="modelValue"
-        :placeholder="placeholder"
+        :placeholder="placeholder" :inputmode="inputmode"
         class="border-none flex-1 font-normal text-base text-secondary outline-none focus:outline-none focus:ring-0 bg-transparent placeholder:text-gray-40 h-full p-0"
-        @input="onInput" @focus="focused = true" @blur="focused = false" />
+        @input="onInput" @focus="focused = true" @blur="onBlur" />
 
       <!-- Password Toggle / Right Icon Slot -->
       <div v-if="isPassword || $slots['right-icon']" class="ml-2 flex items-center">

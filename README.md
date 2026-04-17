@@ -2,6 +2,8 @@
 
 ## Instrucciones de ejecución
 
+Acceso rápido al despliegue: https://kambista.netlify.app/
+
 ```bash
 # Instalar dependencias
 npm install

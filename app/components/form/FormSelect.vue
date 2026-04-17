@@ -28,7 +28,7 @@ const sheetVisible = ref(false)
 const selectedOption = computed(() => props.options.find(o => o.value === value.value))
 
 function onSelect(val: string) {
-  handleChange(val)
+  handleChange(val, true)
 }
 
 function handleAccept() {

@@ -9,11 +9,15 @@ interface IProps {
 const props = defineProps<IProps>()
 
 const { value, errorMessage, handleChange } = useField<boolean>(() => props.name)
+
+function onChange(checked: boolean) {
+  handleChange(checked, true)
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-1.5">
-    <UiBaseCheckbox :checked="value ?? false" @update:checked="handleChange">
+    <UiBaseCheckbox :checked="value ?? false" @update:checked="onChange">
       <slot>{{ label }}</slot>
     </UiBaseCheckbox>
 
